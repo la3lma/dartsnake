@@ -5,6 +5,11 @@ import 'dart:math';
 // XXX This should be a class
 //     it should also be on github.
 //     Todo:  - Arrays with collision detection [check]
+//            - Do a proper layered architecture.  This code is
+//              a mess. So I'm learning a new language, that's
+//              no excuse for being messy (the lack of a good 
+//              editor may be though :-)
+//            - Get the stupid dart editor to open files (yeah, really)
 //            - Get the background color of the canvas to facilitate proper overwriting?
 //                -- Naah, just figure out the coords of the backtround and paint it in the
 //                   appropriate color.[Check]
