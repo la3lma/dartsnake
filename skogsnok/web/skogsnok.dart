@@ -33,289 +33,290 @@ class Coord {
     int y;
 
     Coord(int x, int y) {
-      this.x = x;
-      this.y = y;
+	this.x = x;
+	this.y = y;
     }
 
     void add(Coord c) {
-      x += c.x;
-      y += c.y;
+	x += c.x;
+	y += c.y;
     }
 
     Coord copy() {
-      return new Coord(x, y);
+	return new Coord(x, y);
     }
 
     void paint(color) {
-      print("Paointing $color");
-      CanvasElement canvas = querySelector("#myCanvas");
-      var gc = canvas.getContext('2d');
-      gc.fillStyle = color;
-      gc.fillRect(width * x, height * y, width, height);
+	print("Paointing $color");
+	CanvasElement canvas = querySelector("#myCanvas");
+	var gc = canvas.getContext('2d');
+	gc.fillStyle = color;
+	gc.fillRect(width * x, height * y, width, height);
     }
 
 
     void paintBlack() {
-      paint("#000000");
+	paint("#000000");
     }
 
 
     void paintWhite() {
-      paint("#FFFFFF");
+	paint("#FFFFFF");
     }
 
     bool equals(Coord other) {
-      return ((other.x == x) && (other.y == y));
+	return ((other.x == x) && (other.y == y));
     }
 }
 
 class Snake {
-  int maxSize = 3;
-  List<Coord> coords = new List();
+    int maxSize = 3;
+    List<Coord> coords = new List();
 
-  int cwidth;
-  int cheight;
+    int cwidth;
+    int cheight;
 
-  int cowidth;
-  int coheight;
+    int cowidth;
+    int coheight;
 
-  int points = 5;
+    int points = 5;
 
-   Snake() {
-    // XXX Layering violation
-    CanvasElement canvas = querySelector("#myCanvas");
-    coords.add(new Coord(10, 10));
-    cwidth = canvas.width;
-    cheight = canvas.height;
+    Snake() {
+	// XXX Layering violation
+	CanvasElement canvas = querySelector("#myCanvas");
+	coords.add(new Coord(10, 10));
+	cwidth = canvas.width;
+	cheight = canvas.height;
 
-    // XXX Math.round dosn't exist but you get my drift.
+	// XXX Math.round dosn't exist but you get my drift.
 
-    cowidth = (cwidth / width).round();
-    coheight = (cheight / width).round();
-    clearCanvas();
-    assert(coords.length == 1);
-  }
-
-  void addPoints(num delta) {
-    points += delta;
-  }
-
-  void showPoints() {
-    var pts = querySelector("#points");
-    pts.text = "Points: ${points}";
-  }
-
-   // Detect if we're outside the canvas.
-  bool isOnCanvas(Coord coord) {
-      return (coord.x >= 0
-              && coord.y >= 0
-              && coord.x <= cowidth
-              && coord.y <= coheight);
-  }
-
-   void clearCanvas() {
-     final CanvasElement canvas = querySelector("#myCanvas");
-     var gc = canvas.getContext('2d');
-     gc.fillStyle = "#FFFFFF";
-     gc.fillRect(0, 0, cwidth, cheight);
-   }
-
-  void collisionWithTail() {
-     print("Collision with tail detected.");
-   }
-
-
-  void collisionWithCanvas() {
-    print ("Collision with canvas detected.");
-  }
-
-  bool containsCoord(final Coord c) {
-    for (int i = 0; i < coords.length - 1 ; i++) {
-     final current = coords[i];
-      if (current.equals(c)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  Coord head() {
-    return coords.elementAt(coords.length - 1);
-  }
-
-  num length() {
-    return coords.length;
-  }
-
-  Coord tail() {
-    return coords.elementAt(0);
-  }
-  void move(final Coord direction) {
-
-    if (coords.length < 1) {
-      return;
+	cowidth = (cwidth / width).round();
+	coheight = (cheight / width).round();
+	clearCanvas();
+	assert(coords.length == 1);
     }
 
-    var oldLength = coords.length;
+    void addPoints(num delta) {
+	points += delta;
+    }
 
-     // Calculate new candidate head and tail coords
-     final Coord tailCoord = tail();
-     assert (tailCoord != null);
-     final Coord headCoord = head();
-     assert(headCoord != null);
+    void showPoints() {
+	var pts = querySelector("#points");
+	pts.text = "Points: ${points}";
+    }
 
-     final Coord newHead = headCoord.copy();
-     assert(newHead != null);
-     print("length = ${coords.length}");
-     newHead.add(direction);
+    // Detect if we're outside the canvas.
+    bool isOnCanvas(Coord coord) {
+	return (coord.x >= 0
+		&& coord.y >= 0
+		&& coord.x <= cowidth
+		&& coord.y <= coheight);
+    }
 
-     print("head.x = ${newHead.x} head.y=${newHead.y}");
-     if (!isOnCanvas(newHead)) {
-       collisionWithCanvas();
-       return;
-     }
+    void clearCanvas() {
+	final CanvasElement canvas = querySelector("#myCanvas");
+	var gc = canvas.getContext('2d');
+	gc.fillStyle = "#FFFFFF";
+	gc.fillRect(0, 0, cwidth, cheight);
+    }
 
-     // Check for collisions with tail
-     // Last element is irrelevant since we'll be moving
-     // away from that, hence the -1.
-     if (containsCoord(newHead)) {
-       collisionWithTail();
-       return;
-     }
+    void collisionWithTail() {
+	print("Collision with tail detected.");
+	stopGame();
+    }
 
-     // If we're not at max length, then grow length
-     if (coords.length == maxSize) {
-       print("Maintaining  tail");
-       coords.removeAt(0); /// Nuke tail.
-       tailCoord.paintWhite();
-     } else {
-       print("Growing tail");
-     }
-     print("Tail length = ${coords.length}");
-     coords.add(newHead);
 
-     assert (coords.length >= oldLength);
+    void collisionWithCanvas() {
+	print ("Collision with canvas detected.");
+	stopGame();
+    }
 
-     newHead.paintBlack();
-   }
+    bool containsCoord(final Coord c) {
+	for (int i = 0; i < coords.length - 1 ; i++) {
+	    final current = coords[i];
+	    if (current.equals(c)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    Coord head() {
+	return coords.elementAt(coords.length - 1);
+    }
+
+    num length() {
+	return coords.length;
+    }
+
+    Coord tail() {
+	return coords.elementAt(0);
+    }
+    void move(final Coord direction) {
+
+	if (coords.length < 1) {
+	    return;
+	}
+
+	var oldLength = coords.length;
+
+	// Calculate new candidate head and tail coords
+	final Coord tailCoord = tail();
+	assert (tailCoord != null);
+	final Coord headCoord = head();
+	assert(headCoord != null);
+
+	final Coord newHead = headCoord.copy();
+	assert(newHead != null);
+	print("length = ${coords.length}");
+	newHead.add(direction);
+
+	print("head.x = ${newHead.x} head.y=${newHead.y}");
+	if (!isOnCanvas(newHead)) {
+	    collisionWithCanvas();
+	    return;
+	}
+
+	// Check for collisions with tail
+	// Last element is irrelevant since we'll be moving
+	// away from that, hence the -1.
+	if (containsCoord(newHead)) {
+	    collisionWithTail();
+	    return;
+	}
+
+	// If we're not at max length, then grow length
+	if (coords.length == maxSize) {
+	    print("Maintaining  tail");
+	    coords.removeAt(0); /// Nuke tail.
+	    tailCoord.paintWhite();
+	} else {
+	    print("Growing tail");
+	}
+	print("Tail length = ${coords.length}");
+	coords.add(newHead);
+
+	assert (coords.length >= oldLength);
+
+	newHead.paintBlack();
+    }
 }
 
 class Gold {
-  Random rnd;
-  Coord location;
-  Snake snake;
-  num points = 5;
+    Random rnd;
+    Coord location;
+    Snake snake;
+    num points = 5;
 
-  Gold(final Snake s) {
-    snake = s;
-    rnd = new Random();
-    setNewLocation();
-  }
-
-  /**
-   * Show the gold
-   */
-  void show() {
-    location.paint("#FFD700");
-  }
-
-  /**
-   * Set the location to a random point within the
-   * canvas, but not anywhere on the snake.
-   */
-  void setNewLocation() {
-    Coord newLoc;
-    do  {
-       newLoc = new Coord(
-            rnd.nextInt(snake.cowidth),
-            rnd.nextInt(snake.coheight));
-    } while(snake.containsCoord(newLoc));
-    location = newLoc;
-    show();
-  }
-
-  void gameAction() {
-    if (location.equals(snake.head())) {
-        snake.addPoints(points + snake.length());
-        setNewLocation();
+    Gold(final Snake s) {
+	snake = s;
+	rnd = new Random();
+	setNewLocation();
     }
-  }
+
+    /**
+     * Show the gold
+     */
+    void show() {
+	location.paint("#FFD700");
+    }
+
+    /**
+     * Set the location to a random point within the
+     * canvas, but not anywhere on the snake.
+     */
+    void setNewLocation() {
+	Coord newLoc;
+	do  {
+	    newLoc = new Coord(
+			       rnd.nextInt(snake.cowidth),
+			       rnd.nextInt(snake.coheight));
+	} while(snake.containsCoord(newLoc));
+	location = newLoc;
+	show();
+    }
+
+    void gameAction() {
+	if (location.equals(snake.head())) {
+	    snake.addPoints(points + snake.length());
+	    setNewLocation();
+	}
+    }
 }
 
 Snake snake;
 Gold  gold;
 
 void newGame() {
-  print("Starting new game");
-  stopStreams();
-  snake = new Snake();
-  snake.clearCanvas();
-  gold = new Gold(snake);
+    print("Starting new game");
+    stopStreams();
+    snake = new Snake();
+    snake.clearCanvas();
+    gold = new Gold(snake);
 
-  startUpdates(pauseInMillis, tailIncreaseInterval);
-  print("New game started");
+    startUpdates(pauseInMillis, tailIncreaseInterval);
+    print("New game started");
 }
 
 void main() {
-  window.onKeyDown.listen(handleKeyDown);
-  newGame();
+    window.onKeyDown.listen(handleKeyDown);
+    newGame();
 }
 
-var stream;
-var stream2;
-var stream3;
+
+Stream stream;
+Stream stream2;
+Stream stream3;
+
+void stopGame() {
+    stopStreams();
+}
 
 void stopStreams() {
-
-  if (stream != null) {
-    stream.close();
-  }
-
-  if (stream2 != null) {
-    stream2.close();
-  }
-
-  if (stream3 != null) {
-    stream3.close();
-  }
+    // Let updates happen every millionth millisecond
+    // (XXX Clunky)
+    print("Stop scheduling");
 }
 
 
 void startUpdates(final int movementInterval,
                   final int tailIncreaseInterval) {
 
-  // XXX This is a bit clunky.
-  stream =
-      new Stream.periodic(new Duration(milliseconds: movementInterval), movement);
-  stream.listen((ignorethis) {}, cancelOnError: true);
+    // XXX This is a bit clunky.
+    stream =
+	new Stream.periodic(new Duration(milliseconds: movementInterval), movement);
+    stream.listen((ignorethis) {}, cancelOnError: true);
 
-  stream2 =
-      new Stream.periodic(new Duration(milliseconds: tailIncreaseInterval), increaseTailLength);
-  stream2.listen((ignorethis) {}, cancelOnError: true);
+    stream2 =
+	new Stream.periodic(new Duration(milliseconds: tailIncreaseInterval), increaseTailLength);
+    stream2.listen((ignorethis) {}, cancelOnError: true);
 
-  stream3 =
-      new Stream.periodic(new Duration(milliseconds: movementInterval), showPoints);
-  stream3.listen((ignorethis) {}, cancelOnError: true);
+    stream3 =
+	new Stream.periodic(new Duration(milliseconds: movementInterval), showPoints);
+    stream3.listen((ignorethis) {}, cancelOnError: true);
 }
 
 // XXX Badly named
 void increaseTailLength(param) {
-  snake.maxSize += 1;
-  pauseInMillis = max(pauseInMillis - 2, 350);
-  stream =
-      new Stream.periodic(new Duration(milliseconds: pauseInMillis), movement);
-  stream.listen((ignorethis) {}, cancelOnError: true);
+    snake.maxSize += 1;
+    pauseInMillis = max(pauseInMillis - 2, 350);
+    stream =
+	new Stream.periodic(new Duration(milliseconds: pauseInMillis), movement);
+    stream.listen((ignorethis) {}, cancelOnError: true);
 }
+
 
 void showPoints(param) {
-  snake.showPoints();
+    snake.showPoints();
 }
 
+
 void movement(param) {
-  print("movement");
-  snake.move(direction);
-  gold.gameAction();
+    print("movement");
+    snake.move(direction);
+    gold.gameAction();
 }
+
 
 Coord right = new Coord(1,0);
 Coord left = new Coord(-1,0);
@@ -325,13 +326,12 @@ Coord down = new Coord(0, 1);
 Coord direction = right;
 
 void handleKeyDown(e) {
-  int keyCode = e.keyCode;
+    final int keyCode = e.keyCode;
 
-  switch (keyCode) {
+    switch (keyCode) {
     case 39: direction = right ; break;
     case 37: direction = left; break;
     case 38: direction = up; break;
     case 40: direction = down; break;
-  }
+    }
 }
-
