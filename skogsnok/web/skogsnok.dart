@@ -24,7 +24,8 @@ num x = 10;
 num y = 10;
 num width = 10;
 num height = 10;
-num pauseInMillis = 400;
+num initialPauseInMillis = 400;
+num pauseInMillis = initialPauseInMillis;
 num tailIncreaseInterval = 5000;
 
 
@@ -245,13 +246,34 @@ class Gold {
 Snake snake;
 Gold gold;
 
-// Does not reset speed.
+Random rand = new Random(47);
+
+void randomizeDirection() {
+  int dir = rand.nextInt(4);
+  switch (dir) {
+    case 0:
+        direction = left;
+        break;
+      case 1:
+        direction = right;
+        break;
+      case 2:
+        direction = up;
+        break;
+      case 3:
+        direction = down;
+        break;
+  }
+}
+
 void newGame() {
   print("Starting new game");
   stopStreams();
+  pauseInMillis = initialPauseInMillis;
   snake = new Snake();
   snake.clearCanvas();
   gold = new Gold(snake);
+  randomizeDirection();
 
   startUpdates(pauseInMillis, tailIncreaseInterval);
   print("New game started");
