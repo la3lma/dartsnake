@@ -12,7 +12,7 @@ import 'dart:math';
 //                o Determining what the coords of the walls are as a function of
 //                  canvas size.[Check]
 //            - Adding movement to the tail[Check]
-//            - Add gold that can be converted into points.
+//            - Add gold that can be converted into points [check].
 //            - Showing the score.
 //            - Crazy music.
 //            - Psychedelic colors to keep the mind off balance.
@@ -90,8 +90,6 @@ class Snake {
     coords.add(new Coord(10, 10));
     cwidth = canvas.width;
     cheight = canvas.height;
-
-    // XXX Math.round dosn't exist but you get my drift.
 
     cowidth = (cwidth / width).round();
     coheight = (cheight / width).round();
