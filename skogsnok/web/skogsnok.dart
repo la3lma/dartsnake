@@ -271,20 +271,18 @@ Stream stream;
 Stream stream2;
 Stream stream3;
 
+// NOP
 void stopGame() {
   stopStreams();
 }
 
 void stopStreams() {
-  // Let updates happen every millionth millisecond
-  // (XXX Clunky)
   print("Stop scheduling");
 }
 
 
 void startUpdates(final int movementInterval, final int tailIncreaseInterval) {
 
-  // XXX This is a bit clunky.
   stream = new Stream.periodic(new Duration(milliseconds: movementInterval),
       movement);
   stream.listen((ignorethis) {}, cancelOnError: true);
@@ -332,16 +330,24 @@ void handleKeyDown(e) {
 
   switch (keyCode) {
     case 39:
-      direction = right;
+      if (direction != left) {
+        direction = right;
+      }
       break;
     case 37:
-      direction = left;
+      if (direction != right) {
+        direction = left;
+      }
       break;
     case 38:
-      direction = up;
+      if (direction != down) {
+        direction = up;
+      }
       break;
     case 40:
-      direction = down;
+      if (direction != up) {
+        direction = down;
+      }
       break;
   }
 }
