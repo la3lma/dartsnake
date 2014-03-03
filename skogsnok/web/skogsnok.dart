@@ -331,7 +331,7 @@ void startUpdates(final int movementInterval, final int tailIncreaseInterval) {
   stream3.listen((ignorethis) {}, cancelOnError: true);
 }
 
-// XXX Badly named
+
 void increaseTailLength(param) {
   snake.maxSize += 1;
   pauseInMillis = max(pauseInMillis - 2, 350);
