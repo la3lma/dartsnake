@@ -255,23 +255,24 @@ Gold gold;
 
 Random rand = new Random(47);
 
-void randomizeDirection() {
+void randomDirection() {
   int dir = rand.nextInt(4);
   switch (dir) {
     case 0:
-        direction = left;
-        break;
+        return left;
       case 1:
-        direction = right;
-        break;
+        return right;
       case 2:
-        direction = up;
-        break;
-      case 3:
-        direction = down;
-        break;
+        return up;
+      default:
+        return down;
   }
 }
+
+void randomizeDirection() {
+  direction = randomDirection();
+}
+
 
 void newGame() {
   print("Starting new game");
