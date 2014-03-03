@@ -30,12 +30,14 @@ num tailIncreaseInterval = 5000;
 
 
 class Coord {
+  String name;
   int x;
   int y;
 
   Coord(int x, int y) {
     this.x = x;
     this.y = y;
+    name = "";
   }
 
   void add(Coord c) {
@@ -101,9 +103,19 @@ class Snake {
     points += delta;
   }
 
+  void showData() {
+    showPoints();
+    showDirection();
+  }
+
   void showPoints() {
     var pts = querySelector("#points");
     pts.text = "Points: ${points}";
+  }
+
+  void showDirection() {
+    var pts = querySelector("#direction");
+    pts.text = "Direction: ${direction.name}";
   }
 
   // Detect if we're outside the canvas.
@@ -282,6 +294,11 @@ void newGame() {
 
 ButtonElement newGameButton;
 void main() {
+  up.name = "up";
+  down.name ="down";
+  left.name ="left";
+  right.name="right";
+
   newGameButton = querySelector('#newGame');
   newGameButton.onClick.listen((e) => newGame());
   window.onKeyDown.listen(handleKeyDown);
@@ -314,7 +331,7 @@ void startUpdates(final int movementInterval, final int tailIncreaseInterval) {
   stream2.listen((ignorethis) {}, cancelOnError: true);
 
   stream3 = new Stream.periodic(new Duration(milliseconds: movementInterval),
-      showPoints);
+      showData);
   stream3.listen((ignorethis) {}, cancelOnError: true);
 }
 
@@ -328,8 +345,8 @@ void increaseTailLength(param) {
 }
 
 
-void showPoints(param) {
-  snake.showPoints();
+void showData(param) {
+  snake.showData();
 }
 
 
