@@ -186,9 +186,6 @@ class Snake {
       return;
     }
 
-    // Check for collisions with tail
-    // Last element is irrelevant since we'll be moving
-    // away from that, hence the -1.
     if (containsCoord(newHead)) {
       collisionWithTail();
       return;
