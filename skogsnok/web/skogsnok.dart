@@ -255,7 +255,7 @@ Gold gold;
 
 Random rand = new Random(47);
 
-void randomDirection() {
+Coord randomDirection() {
   int dir = rand.nextInt(4);
   switch (dir) {
     case 0:
@@ -315,12 +315,17 @@ void stopStreams() {
   print("Stop scheduling");
 }
 
-
-void startUpdates(final int movementInterval, final int tailIncreaseInterval) {
+void updateStream(int movementInterval) {
+  print("Setting movementInterval to ${movementInterval}.");
 
   stream = new Stream.periodic(new Duration(milliseconds: movementInterval),
-      movement);
+       movement);
   stream.listen((ignorethis) {}, cancelOnError: true);
+}
+
+
+void startUpdates(final int movementInterval, final int tailIncreaseInterval) {
+  updateStream(movementInterval);
 
   stream2 = new Stream.periodic(new Duration(milliseconds: tailIncreaseInterval
       ), increaseTailLength);
@@ -335,9 +340,7 @@ void startUpdates(final int movementInterval, final int tailIncreaseInterval) {
 void increaseTailLength(param) {
   snake.maxSize += 1;
   pauseInMillis = max(pauseInMillis - 2, 350);
-  stream = new Stream.periodic(new Duration(milliseconds: pauseInMillis),
-      movement);
-  stream.listen((ignorethis) {}, cancelOnError: true);
+  updateStream(pauseInMillis);
 }
 
 
