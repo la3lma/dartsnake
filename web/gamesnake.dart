@@ -68,33 +68,16 @@ class Coord {
     return new Coord(x, y);
   }
 
-  void paint(color) {
-    print("Paointing $color");
-    CanvasElement canvas = querySelector("#myCanvas");
-    var gc = canvas.getContext('2d');
-    gc.fillStyle = color;
-    gc.fillRect(width * x, height * y, width, height);
-  }
-
-
-  void paintBlack() {
-    paint("#000000");
-  }
-
-
-  void paintWhite() {
-    paint("#FFFFFF");
-  }
 
   bool equals(Coord other) {
     return ((other.x == x) && (other.y == y));
   }
 
   void render(canvas) {
-       CanvasElement canvas = querySelector("#myCanvas");
-       var gc = canvas.getContext('2d');
-       gc.fillStyle = "#FFFFFF";
-       gc.fillRect(width * x, height * y, width, height);
+    CanvasElement canvas = querySelector("#myCanvas");
+    var gc = canvas.getContext('2d');
+    gc.fillStyle = "#FFFFFF";
+    gc.fillRect(width * x, height * y, width, height);
   }
 }
 
@@ -221,8 +204,6 @@ class Snake {
     if (coords.length == maxSize) {
       print("Maintaining  tail");
       coords.removeAt(0);
-      /// Nuke tail.
-      tailCoord.paintWhite();
     } else {
       print("Growing tail");
     }
@@ -230,8 +211,6 @@ class Snake {
     coords.add(newHead);
 
     assert(coords.length >= oldLength);
-
-    newHead.paintBlack();
   }
 
   void render(canvas) {
@@ -256,7 +235,7 @@ class SnakeState extends GameLoopHtmlState {
   }
 
   onRender(GameLoopHtml gameLoop) {
-   snake.render(canvas);
+    snake.render(canvas);
   }
 
 
@@ -344,7 +323,8 @@ class CanvasMenuState extends MenuState {
 
   CanvasRenderingContext2D canvas;
 
-  CanvasMenuState(this.canvas, options, [selected = 0]) : super(options, selected);
+  CanvasMenuState(this.canvas, options, [selected = 0]): super(options, selected
+      );
 
   void onRender(GameLoop gameLoop) {
     print("Rendering Menu");
@@ -376,10 +356,12 @@ class CanvasMenuState extends MenuState {
   }
 }
 
-CanvasMenuState menu_state =
-  new CanvasMenuState(canvas,
-    [ new MenuOption("Start", () { gameLoop.state = initial_state; }),
-      new MenuOption("Quit", () { gameLoop.state = quit_state; } )]);
+CanvasMenuState menu_state = new CanvasMenuState(canvas, [new MenuOption(
+    "Start", () {
+    gameLoop.state = initial_state;
+  }), new MenuOption("Quit", () {
+    gameLoop.state = quit_state;
+  })]);
 
 class QuitState extends SimpleHtmlState {
   void onRender(GameLoopHtml gameLoop) {
@@ -401,4 +383,3 @@ main() {
 
   gameLoop.start();
 }
-
