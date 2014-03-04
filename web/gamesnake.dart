@@ -362,6 +362,7 @@ class SnakeState extends GameLoopHtmlState {
   void onUpdate(GameLoop gameLoop) {
     if (!snake.isRunning()) {
       gameLoop.stop();
+      return;
     }
 
     if ((gameLoop.frame % speed) == 0) {
