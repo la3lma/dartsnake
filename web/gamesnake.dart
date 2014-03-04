@@ -24,20 +24,33 @@ num initialPauseInMillis = 400;
 num pauseInMillis = initialPauseInMillis;
 num tailIncreaseInterval = 5000;
 
+
+String gold_color = "#FFD700";
+String white_color = "#FFFFFF";
+
+
+
 class Gold {
-  Random rnd;
   Coord location;
   Snake snake;
   num points = 5;
 
   Gold(final Snake s) {
     this.snake = s;
-    this.rnd = new Random();
     setNewLocation();
   }
 
   void render(CanvasRenderingContext2D crc) {
-    location.render(crc, "#FFD700");
+    location.render(crc, gold_color);
+  }
+
+
+  Coord newRandomCoordNotOnSnake() {
+    Coord newLoc;
+    do {
+      newLoc = snake.newRandomCoord();
+    } while (snake.containsCoord(newLoc));
+    return newLoc;
   }
 
   /**
@@ -45,12 +58,7 @@ class Gold {
      * canvas, but not anywhere on the snake.
      */
   void setNewLocation() {
-    Coord newLoc;
-    do {
-      newLoc = new Coord(rnd.nextInt(snake.cowidth), rnd.nextInt(snake.coheight)
-          );
-    } while (snake.containsCoord(newLoc));
-    location = newLoc;
+    location = newRandomCoordNotOnSnake();
   }
 
   void gameAction() {
@@ -91,6 +99,7 @@ class Coord {
     crc.fillStyle = color;
     crc.fillRect(width * x, height * y, width, height);
   }
+
 }
 
 class Snake {
@@ -105,20 +114,26 @@ class Snake {
 
   int points = 5;
 
+  Random rnd  = new Random();
+
   bool running = true;
 
   Snake(CanvasRenderingContext2D crc) {
-    coords.add(new Coord(10, 10));
 
-
-    // XXX All of this will be invalid on canvas resize!
     cwidth = crc.canvas.width;
     cheight = crc.canvas.height;
 
     cowidth = (cwidth / width).round();
     coheight = (cheight / width).round();
+
     clearCanvas();
+
+    coords.add(newRandomCoord());
     assert(coords.length == 1);
+  }
+
+  Coord newRandomCoord() {
+    return new Coord(rnd.nextInt(cowidth), rnd.nextInt(coheight));
   }
 
   void addPoints(num delta) {
@@ -145,7 +160,7 @@ class Snake {
   void clearCanvas() {
     // final CanvasElement canvas = querySelector("#myCanvas");
     var gc = canvas.canvas.getContext('2d');
-    gc.fillStyle = "#FFFFFF";
+    gc.fillStyle = white_color;
     gc.fillRect(0, 0, cwidth, cheight);
   }
 
@@ -236,7 +251,7 @@ class Snake {
   }
 
   void render(canvas) {
-    coords.forEach((c) => c.render(canvas, "#FFFFFF"));
+    coords.forEach((c) => c.render(canvas, white_color));
   }
 
   void increaseTail() {
