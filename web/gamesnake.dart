@@ -248,10 +248,6 @@ class Snake {
     assert(coords.length >= oldLength);
   }
 
-  void render(canvas) {
-    coords.forEach((c) => renderSquare(c, white_color));
-  }
-
   void increaseTail() {
     maxSize += 1;
   }
@@ -345,7 +341,6 @@ class SnakeState extends GameLoopHtmlState {
 
     canvas.fillRect(0, 0, 20, 20);
     renderSquare(gold.getLocation(), gold_color);
-    snake.render(canvas);
 
     snake.getCoords().forEach((c) => renderSquare(c, white_color));
     snake.showPoints();
