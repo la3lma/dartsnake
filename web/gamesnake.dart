@@ -145,6 +145,10 @@ class Snake {
   }
 
 
+  List<Coord> getCoords() {
+    return coords;
+  }
+
   // Detect if we're outside the canvas.
   bool isOnCanvas(Coord coord) {
     return (coord.x >= 0 && coord.y >= 0 && coord.x <= cowidth && coord.y <=
@@ -244,8 +248,6 @@ class Snake {
     assert(coords.length >= oldLength);
   }
 
-
-
   void render(canvas) {
     coords.forEach((c) => renderSquare(c, white_color));
   }
@@ -344,6 +346,8 @@ class SnakeState extends GameLoopHtmlState {
     canvas.fillRect(0, 0, 20, 20);
     renderSquare(gold.getLocation(), gold_color);
     snake.render(canvas);
+
+    snake.getCoords().forEach((c) => renderSquare(c, white_color));
     snake.showPoints();
   }
 
@@ -392,9 +396,6 @@ class SnakeState extends GameLoopHtmlState {
 
 
 void newGame() {
-  print("newGame triggered");
-
-
   CanvasElement element = querySelector(".game-element");
   gameLoop = new GameLoopHtml(element);
   canvas = element.context2D;
