@@ -6,7 +6,6 @@ CanvasRenderingContext2D canvas;
 
 const int WIDTH = 640;
 const int HEIGHT = 480;
-
 drawText(CanvasRenderingContext2D canvas, String text, String color) {
   canvas.clearRect(0, 0, WIDTH, HEIGHT);
   canvas.fillStyle = color;
@@ -39,10 +38,10 @@ GameLoopHtmlState initial_state = new InitialState();
 // Create a CustomState class with unique state properties
 
 
-num x = 10;
-num y = 10;
-num width = 10;
-num height = 10;
+// const num x = 10;
+// const num y = 10;
+const num width = 10;
+const num height = 10;
 num initialPauseInMillis = 400;
 num pauseInMillis = initialPauseInMillis;
 num tailIncreaseInterval = 5000;
@@ -73,11 +72,9 @@ class Coord {
     return ((other.x == x) && (other.y == y));
   }
 
-  void render(canvas) {
-    CanvasElement canvas = querySelector("#myCanvas");
-    var gc = canvas.getContext('2d');
-    gc.fillStyle = "#FFFFFF";
-    gc.fillRect(width * x, height * y, width, height);
+  void render(CanvasRenderingContext2D crc) {
+    crc.fillStyle = "#FFFFFF";
+    crc.fillRect(width * x, height * y, width, height);
   }
 }
 
@@ -93,12 +90,13 @@ class Snake {
 
   int points = 5;
 
-  Snake() {
-    // XXX Layering violation
-    CanvasElement canvas = querySelector("#myCanvas");
+  Snake(CanvasRenderingContext2D crc) {
     coords.add(new Coord(10, 10));
-    cwidth = canvas.width;
-    cheight = canvas.height;
+
+
+    // XXX All of this will be invalid on canvas resize!
+    cwidth = crc.canvas.width;
+    cheight = crc.canvas.height;
 
     cowidth = (cwidth / width).round();
     coheight = (cheight / width).round();
@@ -132,8 +130,8 @@ class Snake {
   }
 
   void clearCanvas() {
-    final CanvasElement canvas = querySelector("#myCanvas");
-    var gc = canvas.getContext('2d');
+    // final CanvasElement canvas = querySelector("#myCanvas");
+    var gc = canvas.canvas.getContext('2d');
     gc.fillStyle = "#FFFFFF";
     gc.fillRect(0, 0, cwidth, cheight);
   }
@@ -226,7 +224,7 @@ class SnakeState extends GameLoopHtmlState {
 
   SnakeState(String n) {
     this.name = n;
-    this.snake = new Snake();
+    this.snake = new Snake(canvas);// XXX Should not be necessary (and is a bogus coupling in any case)
   }
 
   onKeyDown(KeyboardEvent event) {
@@ -379,7 +377,7 @@ main() {
   gameLoop = new GameLoopHtml(element);
   canvas = element.context2D;
 
-  gameLoop.state = initial_state;
-
+  // gameLoop.state = initial_state;
+  gameLoop.state = new SnakeState("snake");
   gameLoop.start();
 }
