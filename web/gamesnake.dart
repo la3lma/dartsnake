@@ -433,12 +433,23 @@ class QuitState extends SimpleHtmlState {
 }
 SimpleHtmlState quit_state = new QuitState();
 
-main() {
+
+void newGame() {
+  print("newGame triggered");
+  // Gold gold = new Gold(snake);
+
   CanvasElement element = querySelector(".game-element");
   gameLoop = new GameLoopHtml(element);
   canvas = element.context2D;
 
-  // gameLoop.state = initial_state;
   gameLoop.state = new SnakeState("snake");
   gameLoop.start();
+}
+
+ButtonElement newGameButton;
+
+main() {
+  newGameButton = querySelector('#newGame');
+  newGameButton.onClick.listen((e) => newGame());
+  newGame();
 }
