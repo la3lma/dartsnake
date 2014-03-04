@@ -6,6 +6,7 @@ CanvasRenderingContext2D canvas;
 
 const int WIDTH = 640;
 const int HEIGHT = 480;
+
 drawText(CanvasRenderingContext2D canvas, String text, String color) {
   canvas.clearRect(0, 0, WIDTH, HEIGHT);
   canvas.fillStyle = color;
@@ -224,7 +225,8 @@ class SnakeState extends GameLoopHtmlState {
 
   SnakeState(String n) {
     this.name = n;
-    this.snake = new Snake(canvas);// XXX Should not be necessary (and is a bogus coupling in any case)
+    // XXX Should not be necessary (and is a bogus coupling in any case)
+    this.snake = new Snake(canvas);
   }
 
   onKeyDown(KeyboardEvent event) {
@@ -233,6 +235,14 @@ class SnakeState extends GameLoopHtmlState {
   }
 
   onRender(GameLoopHtml gameLoop) {
+
+    canvas.clearRect(0, 0, WIDTH, HEIGHT);
+    canvas.fillStyle = "rgb(255,165,0)";
+    canvas.fillRect(0, 0, WIDTH, HEIGHT);
+    canvas.font = "italic bold 24px sans-serif";
+    canvas.strokeText("Inside snake pen", 0, 100);
+
+    canvas.fillRect(0, 0, 20, 20);
     snake.render(canvas);
   }
 
