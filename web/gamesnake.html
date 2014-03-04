@@ -6,7 +6,9 @@
   </head>
 
   <body>
-    <h1>GameLoopState Example</h1>
+    <h1>GameSnake</h1>
+    <p id="points">Points: 0</p>
+    <p id="direction">Direction: 0</p>
 
     <div class="game-container">
       <canvas class="game-element" width="640" height="480"></canvas>
@@ -15,5 +17,7 @@
     <script type="application/dart" src="gamesnake.dart"></script>
     <!-- for this next line to work, your pubspec.yaml file must have a dependency on 'browser' -->
     <script src="packages/browser/dart.js"></script>
+
+    <p><button id="newGame" type="button" on-click="{{newGame}}">New game</button></p>
   </body>
 </html>

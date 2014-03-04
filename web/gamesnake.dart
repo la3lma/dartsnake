@@ -222,7 +222,7 @@ class Snake {
 class SnakeState extends GameLoopHtmlState {
   String name;
   Snake snake;
-
+  int speed;
 
   static Coord right = new Coord(1, 0);
   static Coord left = new Coord(-1, 0);
@@ -235,6 +235,7 @@ class SnakeState extends GameLoopHtmlState {
     this.name = n;
     // XXX Should not be necessary (and is a bogus coupling in any case)
     this.snake = new Snake(canvas);
+    this.speed = 10;
   }
 
   Coord getDirectionFromKeyboardEvent(KeyboardEvent e) {
@@ -267,9 +268,6 @@ class SnakeState extends GameLoopHtmlState {
     if (d != null && tailTurnFilter(d, direction)) {
       direction = d;
     }
-    // XX Remove this, let this happen on a
-    //    scheduler once it goes the right way.
-    snake.move(direction);
   }
 
   onRender(GameLoopHtml gameLoop) {
@@ -306,7 +304,9 @@ class SnakeState extends GameLoopHtmlState {
   }
 
   void onUpdate(GameLoop gameLoop) {
-    // IGNORED
+     if ((gameLoop.frame % speed) == 0) {
+       snake.move(direction);
+     }
   }
 }
 
