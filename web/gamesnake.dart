@@ -7,14 +7,6 @@ CanvasRenderingContext2D canvas;
 
 const int WIDTH = 640;
 const int HEIGHT = 480;
-
-//
-// To do this without creating a custom class, just pass your unique handler
-// functions in to the `GameLoopHtmlState` constructor.
-GameLoopHtmlState initial_state = new InitialState();
-
-// Create a CustomState class with unique state properties
-
 const num width = 10;
 const num height = 10;
 num initialPauseInMillis = 400;
