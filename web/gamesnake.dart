@@ -100,6 +100,9 @@ class Snake {
   int maxSize = 3;
   List<Coord> coords = new List();
 
+  // XXX These coordinates do not belong here.  Only the
+  //     snake-coordinates belong here, canvas should completely
+  //     elsewhere.
   int cwidth;
   int cheight;
 
@@ -134,10 +137,7 @@ class Snake {
     points += delta;
   }
 
-  void showData() {
-    showPoints();
-    showDirection();
-  }
+
 
   void showPoints() {
     var pts = querySelector("#points");
@@ -219,10 +219,9 @@ class Snake {
 
     final Coord newHead = headCoord.copy();
     assert(newHead != null);
-    print("length = ${coords.length}");
+
     newHead.add(direction);
 
-    print("head.x = ${newHead.x} head.y=${newHead.y}");
     if (!isOnCanvas(newHead)) {
       collisionWithCanvas();
       return;
@@ -234,15 +233,9 @@ class Snake {
     }
 
     // If we're not at max length, then grow length
-    print("coords.length = ${coords.length}");
-    print("maxSize = ${maxSize}");
     if (coords.length == maxSize) {
-      print("Maintaining  tail");
       coords.removeAt(0);
-    } else {
-      print("Growing tail");
     }
-    print("Tail length = ${coords.length}");
     coords.add(newHead);
 
     assert(coords.length >= oldLength);
@@ -324,7 +317,6 @@ class SnakeState extends GameLoopHtmlState {
 
   onKeyDown(KeyboardEvent event) {
     event.preventDefault();
-    print("Key event");
     Coord d = getDirectionFromKeyboardEvent(event);
     if (d != null && tailTurnFilter(d, direction)) {
       direction = d;
