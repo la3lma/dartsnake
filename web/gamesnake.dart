@@ -91,6 +91,8 @@ class Snake {
 
   int points = 5;
 
+  bool running = true;
+
   Snake(CanvasRenderingContext2D crc) {
     coords.add(new Coord(10, 10));
 
@@ -135,6 +137,14 @@ class Snake {
     var gc = canvas.canvas.getContext('2d');
     gc.fillStyle = "#FFFFFF";
     gc.fillRect(0, 0, cwidth, cheight);
+  }
+
+  void stopGame() {
+    running = false;
+  }
+
+  bool isRunning() {
+    return running;
   }
 
   void collisionWithTail() {
@@ -304,9 +314,14 @@ class SnakeState extends GameLoopHtmlState {
   }
 
   void onUpdate(GameLoop gameLoop) {
-     if ((gameLoop.frame % speed) == 0) {
-       snake.move(direction);
-     }
+    if (!snake.isRunning()) {
+      print("Stopping game");
+      gameLoop.stop();
+    }
+
+    if ((gameLoop.frame % speed) == 0) {
+      snake.move(direction);
+    }
   }
 }
 
