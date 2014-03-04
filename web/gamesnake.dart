@@ -15,9 +15,6 @@ GameLoopHtmlState initial_state = new InitialState();
 
 // Create a CustomState class with unique state properties
 
-
-// const num x = 10;
-// const num y = 10;
 const num width = 10;
 const num height = 10;
 num initialPauseInMillis = 400;
@@ -28,7 +25,10 @@ num tailIncreaseInterval = 5000;
 String gold_color = "#FFD700";
 String white_color = "#FFFFFF";
 
-
+void renderSquare(final Coord c, final String color) {
+   canvas.fillStyle = color;
+   canvas.fillRect(width * c.getX(), height * c.getY(), width, height);
+}
 
 class Gold {
   Coord location;
@@ -40,8 +40,8 @@ class Gold {
     setNewLocation();
   }
 
-  void render(CanvasRenderingContext2D crc) {
-    location.render(crc, gold_color);
+  Coord getLocation() {
+    return location;
   }
 
 
@@ -95,11 +95,13 @@ class Coord {
     return ((other.x == x) && (other.y == y));
   }
 
-  void render(CanvasRenderingContext2D crc, color) {
-    crc.fillStyle = color;
-    crc.fillRect(width * x, height * y, width, height);
+  int getX() {
+    return x;
   }
 
+  int getY() {
+    return y;
+  }
 }
 
 class Snake {
@@ -250,8 +252,10 @@ class Snake {
     assert(coords.length >= oldLength);
   }
 
+
+
   void render(canvas) {
-    coords.forEach((c) => c.render(canvas, white_color));
+    coords.forEach((c) => renderSquare(c, white_color));
   }
 
   void increaseTail() {
@@ -260,9 +264,6 @@ class Snake {
 }
 
 
-
-// Subclassing GameLoopState allows you to organise the state of your game
-// without poluting the global state.
 class SnakeState extends GameLoopHtmlState {
   String name;
   Snake snake;
@@ -350,7 +351,8 @@ class SnakeState extends GameLoopHtmlState {
     canvas.strokeText("Inside snake pen", 0, 100);
 
     canvas.fillRect(0, 0, 20, 20);
-    gold.render(canvas);
+    renderSquare(gold.getLocation(), gold_color);
+    // XXX gold.render(canvas);
     snake.render(canvas);
 
     snake.showPoints();
@@ -379,7 +381,6 @@ class SnakeState extends GameLoopHtmlState {
 
   void onUpdate(GameLoop gameLoop) {
     if (!snake.isRunning()) {
-      print("Stopping game");
       gameLoop.stop();
     }
 
