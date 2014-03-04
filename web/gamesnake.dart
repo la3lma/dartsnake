@@ -259,6 +259,8 @@ class Snake {
   }
 }
 
+
+
 // Subclassing GameLoopState allows you to organise the state of your game
 // without poluting the global state.
 class SnakeState extends GameLoopHtmlState {
@@ -267,24 +269,42 @@ class SnakeState extends GameLoopHtmlState {
   int speed;
   int tailClock;
   int increaseSpeed;
+  Random rand = new Random();
 
   static Coord right = new Coord(1, 0);
   static Coord left = new Coord(-1, 0);
   static Coord up = new Coord(0, -1);
   static Coord down = new Coord(0, 1);
 
-  Coord direction = right;
+  Coord direction;
 
   Gold gold;
 
   SnakeState(String n) {
     this.name = n;
-    // XXX Should not be necessary (and is a bogus coupling in any case)
+
+    this.direction = randomDirection();
     this.snake = new Snake(canvas);
     this.gold = new Gold(this.snake);
     this.speed = 10;
     this.tailClock = 100;
     this.increaseSpeed = tailClock * tailClock;
+  }
+
+
+
+  Coord randomDirection() {
+    int dir = rand.nextInt(4);
+    switch (dir) {
+      case 0:
+          return left;
+        case 1:
+          return right;
+        case 2:
+          return up;
+        default:
+          return down;
+    }
   }
 
   Coord getDirectionFromKeyboardEvent(KeyboardEvent e) {
