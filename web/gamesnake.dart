@@ -293,7 +293,6 @@ class SnakeState extends GameLoopHtmlState {
   }
 
 
-
   Coord randomDirection() {
     int dir = rand.nextInt(4);
     switch (dir) {
@@ -352,9 +351,7 @@ class SnakeState extends GameLoopHtmlState {
 
     canvas.fillRect(0, 0, 20, 20);
     renderSquare(gold.getLocation(), gold_color);
-    // XXX gold.render(canvas);
     snake.render(canvas);
-
     snake.showPoints();
   }
 
