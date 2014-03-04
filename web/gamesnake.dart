@@ -247,6 +247,8 @@ class Snake {
     }
 
     // If we're not at max length, then grow length
+    print("coords.length = ${coords.length}");
+    print("maxSize = ${maxSize}");
     if (coords.length == maxSize) {
       print("Maintaining  tail");
       coords.removeAt(0);
@@ -262,6 +264,10 @@ class Snake {
   void render(canvas) {
     coords.forEach((c) => c.render(canvas, "#FFFFFF"));
   }
+
+  void increaseTail() {
+     maxSize += 1;
+  }
 }
 
 // Subclassing GameLoopState allows you to organise the state of your game
@@ -270,6 +276,7 @@ class SnakeState extends GameLoopHtmlState {
   String name;
   Snake snake;
   int speed;
+  int tailClock;
 
   static Coord right = new Coord(1, 0);
   static Coord left = new Coord(-1, 0);
@@ -286,6 +293,7 @@ class SnakeState extends GameLoopHtmlState {
     this.snake = new Snake(canvas);
     this.gold = new Gold(this.snake);
     this.speed = 10;
+    this.tailClock = 100;
   }
 
   Coord getDirectionFromKeyboardEvent(KeyboardEvent e) {
@@ -368,6 +376,11 @@ class SnakeState extends GameLoopHtmlState {
       snake.move(direction);
       gold.gameAction();
     }
+
+
+    if ((gameLoop.frame % tailClock) == 0) {
+       snake.increaseTail();
+      }
   }
 }
 
