@@ -335,7 +335,6 @@ class SnakeState extends GameLoopHtmlState {
     snake.render(canvas);
 
     snake.showPoints();
-
   }
 
 
