@@ -62,13 +62,6 @@ class Gold {
     setNewLocation();
   }
 
-  /**
-     * Show the gold
-     */
-  void show() {
-    location.paint("#FFD700");
-  }
-
   void render(CanvasRenderingContext2D crc) {
     location.render(crc, "#FFD700");
   }
@@ -168,10 +161,6 @@ class Snake {
     pts.text = "Points: ${points}";
   }
 
-  void showDirection() {
-    var pts = querySelector("#direction");
-    pts.text = "Direction: ${direction.name}";
-  }
 
   // Detect if we're outside the canvas.
   bool isOnCanvas(Coord coord) {
@@ -315,6 +304,10 @@ class SnakeState extends GameLoopHtmlState {
     }
   }
 
+  Gold getGold() {
+    return gold;
+  }
+
   bool tailTurnFilter(Coord c, Coord dir) {
     return ((c == up && dir != down) || (c == down && dir != up) || (c == left
         && dir != right) || (c == right && dir != left));
@@ -340,6 +333,9 @@ class SnakeState extends GameLoopHtmlState {
     canvas.fillRect(0, 0, 20, 20);
     gold.render(canvas);
     snake.render(canvas);
+
+    snake.showPoints();
+
   }
 
 
@@ -371,6 +367,7 @@ class SnakeState extends GameLoopHtmlState {
 
     if ((gameLoop.frame % speed) == 0) {
       snake.move(direction);
+      gold.gameAction();
     }
   }
 }
