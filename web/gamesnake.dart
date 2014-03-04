@@ -265,10 +265,8 @@ class SnakeState extends GameLoopHtmlState {
   }
 
   bool tailTurnFilter(Coord c, Coord dir) {
-    return ((c == up && dir != down) ||
-            (c == down && dir != up) ||
-            (c == left && dir != right) ||
-            (c == right && dir != left));
+    return ((c == up && dir != down) || (c == down && dir != up) || (c == left
+        && dir != right) || (c == right && dir != left));
   }
 
   onKeyDown(KeyboardEvent event) {
