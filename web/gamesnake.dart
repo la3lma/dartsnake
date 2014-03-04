@@ -223,15 +223,53 @@ class SnakeState extends GameLoopHtmlState {
   String name;
   Snake snake;
 
+
+  static Coord right = new Coord(1, 0);
+  static Coord left = new Coord(-1, 0);
+  static Coord up = new Coord(0, -1);
+  static Coord down = new Coord(0, 1);
+
+  Coord direction = right;
+
   SnakeState(String n) {
     this.name = n;
     // XXX Should not be necessary (and is a bogus coupling in any case)
     this.snake = new Snake(canvas);
   }
 
+  Coord getDirectionFromKeyboardEvent(KeyboardEvent e) {
+    final int keyCode = e.keyCode;
+    switch (keyCode) {
+      case 39:
+        return right;
+      case 37:
+        return left;
+      case 38:
+        return up;
+      case 40:
+        return down;
+      default:
+        return null;
+    }
+  }
+
+  bool tailTurnFilter(Coord c, Coord dir) {
+    return ((c == up && dir != down) ||
+            (c == down && dir != up) ||
+            (c == left && dir != right) ||
+            (c == right && dir != left));
+  }
+
   onKeyDown(KeyboardEvent event) {
     event.preventDefault();
     print("Key event");
+    Coord d = getDirectionFromKeyboardEvent(event);
+    if (d != null && tailTurnFilter(d, direction)) {
+      direction = d;
+    }
+    // XX Remove this, let this happen on a
+    //    scheduler once it goes the right way.
+    snake.move(direction);
   }
 
   onRender(GameLoopHtml gameLoop) {
