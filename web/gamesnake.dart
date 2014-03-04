@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'dart:math';
 import 'package:game_loop/game_loop_html.dart';
 
 GameLoopHtml gameLoop;
@@ -48,6 +49,52 @@ num pauseInMillis = initialPauseInMillis;
 num tailIncreaseInterval = 5000;
 
 
+
+class Gold {
+  Random rnd;
+  Coord location;
+  Snake snake;
+  num points = 5;
+
+  Gold(final Snake s) {
+    this.snake = s;
+    this.rnd = new Random();
+    setNewLocation();
+  }
+
+  /**
+     * Show the gold
+     */
+  void show() {
+    location.paint("#FFD700");
+  }
+
+  void render(CanvasRenderingContext2D crc) {
+    location.render(crc, "#FFD700");
+  }
+
+  /**
+     * Set the location to a random point within the
+     * canvas, but not anywhere on the snake.
+     */
+  void setNewLocation() {
+    Coord newLoc;
+    do {
+      newLoc = new Coord(rnd.nextInt(snake.cowidth), rnd.nextInt(snake.coheight)
+          );
+    } while (snake.containsCoord(newLoc));
+    location = newLoc;
+  }
+
+  void gameAction() {
+    if (location.equals(snake.head())) {
+      snake.addPoints(points + snake.length());
+      setNewLocation();
+    }
+  }
+}
+
+
 class Coord {
   String name;
   int x;
@@ -73,8 +120,8 @@ class Coord {
     return ((other.x == x) && (other.y == y));
   }
 
-  void render(CanvasRenderingContext2D crc) {
-    crc.fillStyle = "#FFFFFF";
+  void render(CanvasRenderingContext2D crc, color) {
+    crc.fillStyle = color;
     crc.fillRect(width * x, height * y, width, height);
   }
 }
@@ -179,6 +226,7 @@ class Snake {
   Coord tail() {
     return coords.elementAt(0);
   }
+
   void move(final Coord direction) {
 
     if (coords.length < 1) {
@@ -223,7 +271,7 @@ class Snake {
   }
 
   void render(canvas) {
-    coords.forEach((c) => c.render(canvas));
+    coords.forEach((c) => c.render(canvas, "#FFFFFF"));
   }
 }
 
@@ -241,10 +289,13 @@ class SnakeState extends GameLoopHtmlState {
 
   Coord direction = right;
 
+  Gold gold;
+
   SnakeState(String n) {
     this.name = n;
     // XXX Should not be necessary (and is a bogus coupling in any case)
     this.snake = new Snake(canvas);
+    this.gold = new Gold(this.snake);
     this.speed = 10;
   }
 
@@ -287,6 +338,7 @@ class SnakeState extends GameLoopHtmlState {
     canvas.strokeText("Inside snake pen", 0, 100);
 
     canvas.fillRect(0, 0, 20, 20);
+    gold.render(canvas);
     snake.render(canvas);
   }
 
@@ -436,7 +488,7 @@ SimpleHtmlState quit_state = new QuitState();
 
 void newGame() {
   print("newGame triggered");
-  // Gold gold = new Gold(snake);
+
 
   CanvasElement element = querySelector(".game-element");
   gameLoop = new GameLoopHtml(element);
