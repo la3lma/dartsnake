@@ -266,7 +266,7 @@ class Snake {
   }
 
   void increaseTail() {
-     maxSize += 1;
+    maxSize += 1;
   }
 }
 
@@ -277,6 +277,7 @@ class SnakeState extends GameLoopHtmlState {
   Snake snake;
   int speed;
   int tailClock;
+  int increaseSpeed;
 
   static Coord right = new Coord(1, 0);
   static Coord left = new Coord(-1, 0);
@@ -294,6 +295,7 @@ class SnakeState extends GameLoopHtmlState {
     this.gold = new Gold(this.snake);
     this.speed = 10;
     this.tailClock = 100;
+    this.increaseSpeed = tailClock * tailClock;
   }
 
   Coord getDirectionFromKeyboardEvent(KeyboardEvent e) {
@@ -377,10 +379,15 @@ class SnakeState extends GameLoopHtmlState {
       gold.gameAction();
     }
 
-
     if ((gameLoop.frame % tailClock) == 0) {
-       snake.increaseTail();
+      snake.increaseTail();
+    }
+
+    if ((gameLoop.frame % increaseSpeed) == 0) {
+      if (speed > 0) {
+        speed -= 1;
       }
+    }
   }
 }
 
