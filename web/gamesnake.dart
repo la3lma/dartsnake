@@ -295,7 +295,7 @@ class SnakeState extends GameLoopHtmlState {
     this.name = n;
     this.canvas = c;
 
-    renderer = new GridRenderer2D(canvas);
+    renderer = new GridRenderer2D(c);
 
     this.pauseInMillis = initialPauseInMillis;
 
