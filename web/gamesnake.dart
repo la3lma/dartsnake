@@ -143,7 +143,9 @@ class Snake {
     return coords;
   }
 
-  // Detect if we're outside the playing board.
+  /**
+   * Detect if we're outside the playing board.
+   */
   bool isInsidePen(Coord coord) {
     return pen.isInside(coord);
   }
