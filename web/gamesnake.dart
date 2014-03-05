@@ -226,8 +226,6 @@ class SnakeState extends GameLoopHtmlState {
   static Coord snakePenSizeInPixels = new Coord(640, 480);
   static Coord gridBlockSizeInPixels = new Coord(10, 10);
 
-
-
   num initialPauseInMillis = 400;
   num pauseInMillis;
   num tailIncreaseInterval = 5000;
@@ -259,12 +257,9 @@ class SnakeState extends GameLoopHtmlState {
 
   SnakeState(String n, CanvasRenderingContext2D c) {
     this.name = n;
-
     this.canvas = c;
 
     this.pauseInMillis = initialPauseInMillis;
-
-
 
     this.direction = randomDirection();
     int cwidth = canvas.canvas.width;
