@@ -52,7 +52,7 @@ class Coord {
   int x;
   int y;
 
-  Random rnd  = new Random();
+  Random rnd = new Random();
 
   Coord(int x, int y) {
     this.x = x;
@@ -108,7 +108,7 @@ class Snake {
 
   Snake(int w, int h) {
 
-    snakepen = new Coord(w,h);
+    snakepen = new Coord(w, h);
 
     coords.add(newRandomCoord());
     assert(coords.length == 1);
@@ -122,7 +122,7 @@ class Snake {
     points += delta;
   }
 
-  int getPoints(){
+  int getPoints() {
     return points;
   }
 
@@ -218,8 +218,29 @@ class Snake {
   }
 }
 
+class GridRenderer2D {
+  CanvasRenderingContext2D canvas;
+
+  String gold_color = "#FFD700";
+   String white_color = "#FFFFFF";
+
+  static Coord snakePenSizeInPixels = new Coord(640, 480);
+  static Coord gridBlockSizeInPixels = new Coord(10, 10);
+
+  GridRenderer2D(CanvasRenderingContext2D c) {
+    this.canvas = c;
+  }
+
+  void clearCanvas() {
+    var gc = canvas.canvas.getContext('2d');
+    canvas.fillStyle = white_color;
+    canvas.fillRect(0, 0, gridBlockSizeInPixels.getX(), gridBlockSizeInPixels.getY());
+  }
+}
 
 class SnakeState extends GameLoopHtmlState {
+
+  GridRenderer2D renderer;
 
   CanvasRenderingContext2D canvas;
 
@@ -234,8 +255,10 @@ class SnakeState extends GameLoopHtmlState {
   String white_color = "#FFFFFF";
 
   void renderGridBlock(final Coord c, final String color) {
-     canvas.fillStyle = color;
-     canvas.fillRect(gridBlockSizeInPixels.getX() * c.getX(), gridBlockSizeInPixels.getY() * c.getY(), gridBlockSizeInPixels.getX(), gridBlockSizeInPixels.getY());
+    canvas.fillStyle = color;
+    canvas.fillRect(gridBlockSizeInPixels.getX() * c.getX(),
+        gridBlockSizeInPixels.getY() * c.getY(), gridBlockSizeInPixels.getX(),
+        gridBlockSizeInPixels.getY());
   }
 
   String name;
@@ -265,15 +288,17 @@ class SnakeState extends GameLoopHtmlState {
     int cwidth = canvas.canvas.width;
     int cheight = canvas.canvas.height;
 
+    // XXX This doesn't sit right!
     int cowidth = (cwidth / gridBlockSizeInPixels.getX()).round();
     int coheight = (cheight / gridBlockSizeInPixels.getY()).round();
 
+    renderer = new GridRenderer2D(canvas);
+
+    // XXX Much better to use Coord here.
     this.snake = new Snake(cowidth, coheight);
 
     // Clear canvas
-    var gc = canvas.canvas.getContext('2d');
-    canvas.fillStyle = white_color;
-    canvas.fillRect(0, 0, cwidth, cheight);
+    renderer.clearCanvas();
 
     this.gold = new Gold(this.snake);
     this.speed = 10;
@@ -286,13 +311,13 @@ class SnakeState extends GameLoopHtmlState {
     int dir = rand.nextInt(4);
     switch (dir) {
       case 0:
-          return left;
-        case 1:
-          return right;
-        case 2:
-          return up;
-        default:
-          return down;
+        return left;
+      case 1:
+        return right;
+      case 2:
+        return up;
+      default:
+        return down;
     }
   }
 
@@ -334,9 +359,11 @@ class SnakeState extends GameLoopHtmlState {
   }
 
   onRender(GameLoopHtml gameLoop) {
-    canvas.clearRect(0, 0, snakePenSizeInPixels.getX(), snakePenSizeInPixels.getY());
+    canvas.clearRect(0, 0, snakePenSizeInPixels.getX(),
+        snakePenSizeInPixels.getY());
     canvas.fillStyle = "rgb(255,165,0)";
-    canvas.fillRect(0, 0, snakePenSizeInPixels.getX(), snakePenSizeInPixels.getY());
+    canvas.fillRect(0, 0, snakePenSizeInPixels.getX(),
+        snakePenSizeInPixels.getY());
     canvas.font = "italic bold 24px sans-serif";
     canvas.strokeText("Inside snake pen", 0, 100);
 
