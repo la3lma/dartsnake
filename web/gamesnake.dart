@@ -259,7 +259,7 @@ class GridRenderer2D extends GridRenderer {
 
 class SnakeState extends GameLoopHtmlState {
 
-  GridRenderer2D renderer;
+  GridRenderer renderer;
 
   CanvasRenderingContext2D canvas;
 
