@@ -150,7 +150,6 @@ class Snake {
     return pen.isInside(coord);
   }
 
-
   void stopGame() {
     running = false;
   }
@@ -163,7 +162,6 @@ class Snake {
     print("Collision with tail detected.");
     stopGame();
   }
-
 
   void collisionWithCanvas() {
     print("Collision with canvas detected.");
