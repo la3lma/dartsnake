@@ -337,8 +337,6 @@ class SnakeState extends GameLoopHtmlState {
     renderSquare(gold.getLocation(), gold_color);
 
     snake.getCoords().forEach((c) => renderSquare(c, white_color));
-    snake.showPoints();
-
 
     var pts = querySelector("#points");
     pts.text = "Points: ${snake.getPoints()}";
