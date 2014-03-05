@@ -236,6 +236,13 @@ class GridRenderer2D {
     canvas.fillStyle = white_color;
     canvas.fillRect(0, 0, gridBlockSizeInPixels.getX(), gridBlockSizeInPixels.getY());
   }
+
+  void renderGridBlock(final Coord c, final String color) {
+    canvas.fillStyle = color;
+    canvas.fillRect(gridBlockSizeInPixels.getX() * c.getX(),
+        gridBlockSizeInPixels.getY() * c.getY(), gridBlockSizeInPixels.getX(),
+        gridBlockSizeInPixels.getY());
+  }
 }
 
 class SnakeState extends GameLoopHtmlState {
@@ -253,13 +260,6 @@ class SnakeState extends GameLoopHtmlState {
 
   String gold_color = "#FFD700";
   String white_color = "#FFFFFF";
-
-  void renderGridBlock(final Coord c, final String color) {
-    canvas.fillStyle = color;
-    canvas.fillRect(gridBlockSizeInPixels.getX() * c.getX(),
-        gridBlockSizeInPixels.getY() * c.getY(), gridBlockSizeInPixels.getX(),
-        gridBlockSizeInPixels.getY());
-  }
 
   String name;
   Snake snake;
@@ -368,9 +368,9 @@ class SnakeState extends GameLoopHtmlState {
     canvas.strokeText("Inside snake pen", 0, 100);
 
     canvas.fillRect(0, 0, 20, 20);
-    renderGridBlock(gold.getLocation(), gold_color);
+    renderer.renderGridBlock(gold.getLocation(), gold_color);
 
-    snake.getCoords().forEach((c) => renderGridBlock(c, white_color));
+    snake.getCoords().forEach((c) => renderer.renderGridBlock(c, white_color));
     var pts = querySelector("#points");
     pts.text = "Points: ${snake.getPoints()}";
   }
