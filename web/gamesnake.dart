@@ -337,7 +337,6 @@ class SnakeState extends GameLoopHtmlState {
   }
 
   onRender(GameLoopHtml gameLoop) {
-
     canvas.clearRect(0, 0, WIDTH, HEIGHT);
     canvas.fillStyle = "rgb(255,165,0)";
     canvas.fillRect(0, 0, WIDTH, HEIGHT);
@@ -348,7 +347,6 @@ class SnakeState extends GameLoopHtmlState {
     renderSquare(gold.getLocation(), gold_color);
 
     snake.getCoords().forEach((c) => renderSquare(c, white_color));
-
     var pts = querySelector("#points");
     pts.text = "Points: ${snake.getPoints()}";
   }
