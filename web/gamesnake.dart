@@ -221,8 +221,9 @@ class Snake {
 class GridRenderer2D {
   CanvasRenderingContext2D canvas;
 
-  String gold_color = "#FFD700";
-   String white_color = "#FFFFFF";
+  String gold_color =  "#FFD700";
+  String white_color = "#FFFFFF";
+
 
   static Coord snakePenSizeInPixels = new Coord(640, 480);
   static Coord gridBlockSizeInPixels = new Coord(10, 10);
@@ -232,9 +233,7 @@ class GridRenderer2D {
   }
 
   void clearCanvas() {
-    var gc = canvas.canvas.getContext('2d');
-    canvas.fillStyle = white_color;
-    canvas.fillRect(0, 0, gridBlockSizeInPixels.getX(), gridBlockSizeInPixels.getY());
+    fillCanvas(white_color);
   }
 
   void renderGridBlock(final Coord c, final String color) {
@@ -242,6 +241,12 @@ class GridRenderer2D {
     canvas.fillRect(gridBlockSizeInPixels.getX() * c.getX(),
         gridBlockSizeInPixels.getY() * c.getY(), gridBlockSizeInPixels.getX(),
         gridBlockSizeInPixels.getY());
+  }
+
+  void fillCanvas(String color) {
+    canvas.fillStyle = color;
+    canvas.fillRect(0, 0, snakePenSizeInPixels.getX(),
+    snakePenSizeInPixels.getY());
   }
 }
 
@@ -359,11 +364,10 @@ class SnakeState extends GameLoopHtmlState {
   }
 
   onRender(GameLoopHtml gameLoop) {
-    canvas.clearRect(0, 0, snakePenSizeInPixels.getX(),
-        snakePenSizeInPixels.getY());
-    canvas.fillStyle = "rgb(255,165,0)";
-    canvas.fillRect(0, 0, snakePenSizeInPixels.getX(),
-        snakePenSizeInPixels.getY());
+    renderer.clearCanvas();
+
+    renderer.fillCanvas("rgb(255,165,0)");
+
     canvas.font = "italic bold 24px sans-serif";
     canvas.strokeText("Inside snake pen", 0, 100);
 
