@@ -129,7 +129,6 @@ class Snake {
   }
 
 
-
   void showPoints() {
     var pts = querySelector("#points");
     pts.text = "Points: ${points}";
