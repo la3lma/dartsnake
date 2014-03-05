@@ -94,6 +94,12 @@ class Coord {
   Coord randomCoordInside() {
     return new Coord(rnd.nextInt(getX()), rnd.nextInt(getY()));
   }
+
+  Coord operator /(Coord c) {
+      return new Coord(
+          (x / c.x).round(),
+          (y / c.y).round());
+  }
 }
 
 class Snake {
@@ -281,22 +287,22 @@ class SnakeState extends GameLoopHtmlState {
     this.name = n;
     this.canvas = c;
 
+    renderer = new GridRenderer2D(canvas);
+
     this.pauseInMillis = initialPauseInMillis;
 
     this.direction = randomDirection();
-    int cwidth = canvas.canvas.width;
-    int cheight = canvas.canvas.height;
+    Coord canvasSize = new Coord(
+                        canvas.canvas.width,
+                        canvas.canvas.height);
 
-    // XXX This doesn't sit right!
-    int cowidth = (cwidth / gridBlockSizeInPixels.getX()).round();
-    int coheight = (cheight / gridBlockSizeInPixels.getY()).round();
+    // How many grid blocks will fit into a canvas?
+    // Get answer as a coordinate giving number in
+    // horizontal and vertical dimensions through
+    // operator overloading.
+    Coord grid = canvasSize / gridBlockSizeInPixels ;
 
-    Coord grid = new Coord(cowidth, coheight);
-    renderer = new GridRenderer2D(canvas);
-
-    // XXX Much better to use Coord here.
     this.snake = new Snake(grid);
-
 
     this.gold = new Gold(this.snake);
     this.speed = 10;
