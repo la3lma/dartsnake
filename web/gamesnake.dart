@@ -3,24 +3,7 @@ import 'dart:math';
 import 'package:game_loop/game_loop_html.dart';
 
 GameLoopHtml gameLoop;
-CanvasRenderingContext2D canvas;
 
-const int WIDTH = 640;
-const int HEIGHT = 480;
-const num width = 10;
-const num height = 10;
-num initialPauseInMillis = 400;
-num pauseInMillis = initialPauseInMillis;
-num tailIncreaseInterval = 5000;
-
-
-String gold_color = "#FFD700";
-String white_color = "#FFFFFF";
-
-void renderSquare(final Coord c, final String color) {
-   canvas.fillStyle = color;
-   canvas.fillRect(width * c.getX(), height * c.getY(), width, height);
-}
 
 class Gold {
   Coord location;
@@ -237,6 +220,28 @@ class Snake {
 
 
 class SnakeState extends GameLoopHtmlState {
+
+  CanvasRenderingContext2D canvas;
+
+  static const int WIDTH = 640;
+  static const int HEIGHT = 480;
+  static const num width = 10;
+  static const num height = 10;
+
+
+  num initialPauseInMillis = 400;
+  num pauseInMillis;
+  num tailIncreaseInterval = 5000;
+
+
+  String gold_color = "#FFD700";
+  String white_color = "#FFFFFF";
+
+  void renderSquare(final Coord c, final String color) {
+     canvas.fillStyle = color;
+     canvas.fillRect(width * c.getX(), height * c.getY(), width, height);
+  }
+
   String name;
   Snake snake;
   int speed;
@@ -254,8 +259,14 @@ class SnakeState extends GameLoopHtmlState {
 
   Gold gold;
 
-  SnakeState(String n) {
+  SnakeState(String n, CanvasRenderingContext2D c) {
     this.name = n;
+
+    this.canvas = c;
+
+    this.pauseInMillis = initialPauseInMillis;
+
+
 
     this.direction = randomDirection();
     int cwidth = canvas.canvas.width;
@@ -390,9 +401,7 @@ class SnakeState extends GameLoopHtmlState {
 void newGame() {
   CanvasElement element = querySelector(".game-element");
   gameLoop = new GameLoopHtml(element);
-  canvas = element.context2D;
-
-  gameLoop.state = new SnakeState("snake");
+  gameLoop.state = new SnakeState("snake", element.context2D);
   gameLoop.start();
 }
 
