@@ -135,10 +135,8 @@ class Snake {
     points += delta;
   }
 
-
-  void showPoints() {
-    var pts = querySelector("#points");
-    pts.text = "Points: ${points}";
+  int getPoints(){
+    return points;
   }
 
   List<Coord> getCoords() {
@@ -336,6 +334,10 @@ class SnakeState extends GameLoopHtmlState {
 
     snake.getCoords().forEach((c) => renderSquare(c, white_color));
     snake.showPoints();
+
+
+    var pts = querySelector("#points");
+    pts.text = "Points: ${snake.getPoints()}";
   }
 
 
