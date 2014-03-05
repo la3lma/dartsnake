@@ -224,9 +224,9 @@ class SnakeState extends GameLoopHtmlState {
   CanvasRenderingContext2D canvas;
 
   static Coord snakePenSizeInPixels = new Coord(640, 480);
+  static Coord gridBlockSizeInPixels = new Coord(10, 10);
 
-  static const num gridBlockWidth = 10;
-  static const num gridBlockHeight = 10;
+
 
   num initialPauseInMillis = 400;
   num pauseInMillis;
@@ -237,7 +237,7 @@ class SnakeState extends GameLoopHtmlState {
 
   void renderSquare(final Coord c, final String color) {
      canvas.fillStyle = color;
-     canvas.fillRect(gridBlockWidth * c.getX(), gridBlockHeight * c.getY(), gridBlockWidth, gridBlockHeight);
+     canvas.fillRect(gridBlockSizeInPixels.getX() * c.getX(), gridBlockSizeInPixels.getY() * c.getY(), gridBlockSizeInPixels.getX(), gridBlockSizeInPixels.getY());
   }
 
   String name;
@@ -270,8 +270,8 @@ class SnakeState extends GameLoopHtmlState {
     int cwidth = canvas.canvas.width;
     int cheight = canvas.canvas.height;
 
-    int cowidth = (cwidth / gridBlockWidth).round();
-    int coheight = (cheight / gridBlockWidth).round();
+    int cowidth = (cwidth / gridBlockSizeInPixels.getX()).round();
+    int coheight = (cheight / gridBlockSizeInPixels.getY()).round();
 
     this.snake = new Snake(cowidth, coheight);
 
