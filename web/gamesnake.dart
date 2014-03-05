@@ -69,6 +69,8 @@ class Coord {
   int x;
   int y;
 
+  Random rnd  = new Random();
+
   Coord(int x, int y) {
     this.x = x;
     this.y = y;
@@ -105,30 +107,32 @@ class Coord {
   bool isInside(Coord c) {
     return (c.x >= 0 && c.y >= 0 && c.x <= x && c.y <= y);
   }
+
+  Coord randomCoordInside() {
+    return new Coord(rnd.nextInt(getX()), rnd.nextInt(getY()));
+  }
 }
 
 class Snake {
   int maxSize = 3;
   List<Coord> coords = new List();
 
-  Coord pen;
+  Coord snakepen;
 
   int points = 5;
-
-  Random rnd  = new Random();
 
   bool running = true;
 
   Snake(int w, int h) {
 
-    pen = new Coord(w,h);
+    snakepen = new Coord(w,h);
 
     coords.add(newRandomCoord());
     assert(coords.length == 1);
   }
 
   Coord newRandomCoord() {
-    return new Coord(rnd.nextInt(width), rnd.nextInt(height));
+    return snakepen.randomCoordInside();
   }
 
   void addPoints(num delta) {
@@ -147,7 +151,7 @@ class Snake {
    * Detect if we're outside the playing board.
    */
   bool isInsidePen(Coord coord) {
-    return pen.isInside(coord);
+    return snakepen.isInside(coord);
   }
 
   void stopGame() {
