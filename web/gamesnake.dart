@@ -1,6 +1,7 @@
 import 'dart:html';
 import 'dart:math';
 import 'package:game_loop/game_loop_html.dart';
+import 'coord.dart';
 
 GameLoopHtml gameLoop;
 
@@ -44,63 +45,7 @@ class Gold {
   }
 }
 
-/**
- * An immutable 2D coordinate.
- */
-class Coord {
-  String name;
-  int x;
-  int y;
 
-  Random rnd = new Random();
-
-  Coord(int x, int y) {
-    this.x = x;
-    this.y = y;
-    name = "";
-  }
-
-  void add(Coord c) {
-    x += c.x;
-    y += c.y;
-  }
-
-  Coord copy() {
-    return new Coord(x, y);
-  }
-
-
-  bool equals(Coord other) {
-    return ((other.x == x) && (other.y == y));
-  }
-
-  int getX() {
-    return x;
-  }
-
-  int getY() {
-    return y;
-  }
-
-  /**
-   * Assume a square width with x and height y, check if
-   * if the Coord c is inside (including border) of that
-   * square.
-   */
-  bool isInside(Coord c) {
-    return (c.x >= 0 && c.y >= 0 && c.x <= x && c.y <= y);
-  }
-
-  Coord randomCoordInside() {
-    return new Coord(rnd.nextInt(getX()), rnd.nextInt(getY()));
-  }
-
-  Coord operator /(Coord c) {
-      return new Coord(
-          (x / c.x).round(),
-          (y / c.y).round());
-  }
-}
 
 class Snake {
   int maxSize = 3;
@@ -233,6 +178,32 @@ abstract class GridRenderer {
 }
 
 class GridRenderer2D extends GridRenderer {
+  CanvasRenderingContext2D canvas;
+
+  static Coord snakePenSizeInPixels = new Coord(640, 480);
+  static Coord gridBlockSizeInPixels = new Coord(10, 10);
+
+  GridRenderer2D(CanvasRenderingContext2D c) {
+    this.canvas = c;
+  }
+
+
+  void renderGridBlock(final Coord c, final String color) {
+    canvas.fillStyle = color;
+    canvas.fillRect(gridBlockSizeInPixels.getX() * c.getX(),
+        gridBlockSizeInPixels.getY() * c.getY(), gridBlockSizeInPixels.getX(),
+        gridBlockSizeInPixels.getY());
+  }
+
+  void fillCanvas(String color) {
+    canvas.fillStyle = color;
+    canvas.fillRect(0, 0, snakePenSizeInPixels.getX(),
+    snakePenSizeInPixels.getY());
+  }
+}
+
+
+class GridRenderer3D extends GridRenderer {
   CanvasRenderingContext2D canvas;
 
   static Coord snakePenSizeInPixels = new Coord(640, 480);
