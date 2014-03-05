@@ -61,7 +61,9 @@ class Gold {
   }
 }
 
-
+/**
+ * An immutable 2D coordinate.
+ */
 class Coord {
   String name;
   int x;
@@ -100,12 +102,6 @@ class Snake {
   int maxSize = 3;
   List<Coord> coords = new List();
 
-  // XXX These coordinates do not belong here.  Only the
-  //     snake-coordinates belong here, canvas should completely
-  //     elsewhere.
-  int cwidth;
-  int cheight;
-
   int cowidth;
   int coheight;
 
@@ -115,15 +111,10 @@ class Snake {
 
   bool running = true;
 
-  Snake(CanvasRenderingContext2D crc) {
+  Snake(int w, int h) {
 
-    cwidth = crc.canvas.width;
-    cheight = crc.canvas.height;
-
-    cowidth = (cwidth / width).round();
-    coheight = (cheight / width).round();
-
-    clearCanvas();
+    cowidth = w;
+    coheight = h;
 
     coords.add(newRandomCoord());
     assert(coords.length == 1);
@@ -144,23 +135,16 @@ class Snake {
     pts.text = "Points: ${points}";
   }
 
-
   List<Coord> getCoords() {
     return coords;
   }
 
-  // Detect if we're outside the canvas.
+  // Detect if we're outside the playing board.
   bool isOnCanvas(Coord coord) {
     return (coord.x >= 0 && coord.y >= 0 && coord.x <= cowidth && coord.y <=
         coheight);
   }
 
-  void clearCanvas() {
-    // final CanvasElement canvas = querySelector("#myCanvas");
-    var gc = canvas.canvas.getContext('2d');
-    gc.fillStyle = white_color;
-    gc.fillRect(0, 0, cwidth, cheight);
-  }
 
   void stopGame() {
     running = false;
@@ -253,6 +237,7 @@ class SnakeState extends GameLoopHtmlState {
   int speed;
   int tailClock;
   int increaseSpeed;
+
   Random rand = new Random();
 
   static Coord right = new Coord(1, 0);
@@ -268,7 +253,19 @@ class SnakeState extends GameLoopHtmlState {
     this.name = n;
 
     this.direction = randomDirection();
-    this.snake = new Snake(canvas);
+    int cwidth = canvas.canvas.width;
+    int cheight = canvas.canvas.height;
+
+    int cowidth = (cwidth / width).round();
+    int coheight = (cheight / width).round();
+
+    this.snake = new Snake(cowidth, coheight);
+
+    // Clear canvas
+    var gc = canvas.canvas.getContext('2d');
+    canvas.fillStyle = white_color;
+    canvas.fillRect(0, 0, cwidth, cheight);
+
     this.gold = new Gold(this.snake);
     this.speed = 10;
     this.tailClock = 100;
