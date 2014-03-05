@@ -261,8 +261,6 @@ class SnakeState extends GameLoopHtmlState {
 
   GridRenderer renderer;
 
-  CanvasRenderingContext2D canvas;
-
   static Coord snakePenSizeInPixels = new Coord(640, 480);
   static Coord gridBlockSizeInPixels = new Coord(10, 10);
 
@@ -293,7 +291,6 @@ class SnakeState extends GameLoopHtmlState {
 
   SnakeState(String n, CanvasRenderingContext2D c) {
     this.name = n;
-    this.canvas = c;
 
     renderer = new GridRenderer2D(c);
 
@@ -301,8 +298,8 @@ class SnakeState extends GameLoopHtmlState {
 
     this.direction = randomDirection();
     Coord canvasSize = new Coord(
-                        canvas.canvas.width,
-                        canvas.canvas.height);
+                        c.canvas.width,
+                        c.canvas.height);
 
     // How many grid blocks will fit into a canvas?
     // Get answer as a coordinate giving number in
