@@ -316,6 +316,10 @@ class SnakeState extends GameLoopHtmlState {
     return gold;
   }
 
+  /**
+   * Reversing direction into the tail is a very easy, but also
+   * very annoying way for a snake to die, so we avoid that.
+   */
   bool tailTurnFilter(Coord c, Coord dir) {
     return ((c == up && dir != down) || (c == down && dir != up) || (c == left
         && dir != right) || (c == right && dir != left));
