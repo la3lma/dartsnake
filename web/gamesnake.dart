@@ -96,14 +96,22 @@ class Coord {
   int getY() {
     return y;
   }
+
+  /**
+   * Assume a square width with x and height y, check if
+   * if the Coord c is inside (including border) of that
+   * square.
+   */
+  bool isInside(Coord c) {
+    return (c.x >= 0 && c.y >= 0 && c.x <= x && c.y <= y);
+  }
 }
 
 class Snake {
   int maxSize = 3;
   List<Coord> coords = new List();
 
-  int width;
-  int height;
+  Coord pen;
 
   int points = 5;
 
@@ -113,8 +121,7 @@ class Snake {
 
   Snake(int w, int h) {
 
-    width = w;
-    height = h;
+    pen = new Coord(w,h);
 
     coords.add(newRandomCoord());
     assert(coords.length == 1);
@@ -139,9 +146,8 @@ class Snake {
   }
 
   // Detect if we're outside the playing board.
-  bool isOnCanvas(Coord coord) {
-    return (coord.x >= 0 && coord.y >= 0 && coord.x <= width && coord.y <=
-        height);
+  bool isInsidePen(Coord coord) {
+    return pen.isInside(coord);
   }
 
 
@@ -205,7 +211,7 @@ class Snake {
 
     newHead.add(direction);
 
-    if (!isOnCanvas(newHead)) {
+    if (!isInsidePen(newHead)) {
       collisionWithCanvas();
       return;
     }
