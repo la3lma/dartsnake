@@ -159,12 +159,10 @@ class Snake {
   }
 
   void collisionWithTail() {
-    print("Collision with tail detected.");
     stopGame();
   }
 
   void collisionWithCanvas() {
-    print("Collision with canvas detected.");
     stopGame();
   }
 
