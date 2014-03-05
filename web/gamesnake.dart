@@ -223,23 +223,21 @@ class SnakeState extends GameLoopHtmlState {
 
   CanvasRenderingContext2D canvas;
 
-  static const int WIDTH = 640;
-  static const int HEIGHT = 480;
-  static const num width = 10;
-  static const num height = 10;
+  static Coord snakePenSizeInPixels = new Coord(640, 480);
 
+  static const num gridBlockWidth = 10;
+  static const num gridBlockHeight = 10;
 
   num initialPauseInMillis = 400;
   num pauseInMillis;
   num tailIncreaseInterval = 5000;
-
 
   String gold_color = "#FFD700";
   String white_color = "#FFFFFF";
 
   void renderSquare(final Coord c, final String color) {
      canvas.fillStyle = color;
-     canvas.fillRect(width * c.getX(), height * c.getY(), width, height);
+     canvas.fillRect(gridBlockWidth * c.getX(), gridBlockHeight * c.getY(), gridBlockWidth, gridBlockHeight);
   }
 
   String name;
@@ -272,8 +270,8 @@ class SnakeState extends GameLoopHtmlState {
     int cwidth = canvas.canvas.width;
     int cheight = canvas.canvas.height;
 
-    int cowidth = (cwidth / width).round();
-    int coheight = (cheight / width).round();
+    int cowidth = (cwidth / gridBlockWidth).round();
+    int coheight = (cheight / gridBlockWidth).round();
 
     this.snake = new Snake(cowidth, coheight);
 
@@ -337,9 +335,9 @@ class SnakeState extends GameLoopHtmlState {
   }
 
   onRender(GameLoopHtml gameLoop) {
-    canvas.clearRect(0, 0, WIDTH, HEIGHT);
+    canvas.clearRect(0, 0, snakePenSizeInPixels.getX(), snakePenSizeInPixels.getY());
     canvas.fillStyle = "rgb(255,165,0)";
-    canvas.fillRect(0, 0, WIDTH, HEIGHT);
+    canvas.fillRect(0, 0, snakePenSizeInPixels.getX(), snakePenSizeInPixels.getY());
     canvas.font = "italic bold 24px sans-serif";
     canvas.strokeText("Inside snake pen", 0, 100);
 
