@@ -221,7 +221,6 @@ class Snake {
 class GridRenderer2D {
   CanvasRenderingContext2D canvas;
 
-
   static Coord snakePenSizeInPixels = new Coord(640, 480);
   static Coord gridBlockSizeInPixels = new Coord(10, 10);
 
