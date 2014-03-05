@@ -102,8 +102,8 @@ class Snake {
   int maxSize = 3;
   List<Coord> coords = new List();
 
-  int cowidth;
-  int coheight;
+  int width;
+  int height;
 
   int points = 5;
 
@@ -113,15 +113,15 @@ class Snake {
 
   Snake(int w, int h) {
 
-    cowidth = w;
-    coheight = h;
+    width = w;
+    height = h;
 
     coords.add(newRandomCoord());
     assert(coords.length == 1);
   }
 
   Coord newRandomCoord() {
-    return new Coord(rnd.nextInt(cowidth), rnd.nextInt(coheight));
+    return new Coord(rnd.nextInt(width), rnd.nextInt(height));
   }
 
   void addPoints(num delta) {
@@ -140,8 +140,8 @@ class Snake {
 
   // Detect if we're outside the playing board.
   bool isOnCanvas(Coord coord) {
-    return (coord.x >= 0 && coord.y >= 0 && coord.x <= cowidth && coord.y <=
-        coheight);
+    return (coord.x >= 0 && coord.y >= 0 && coord.x <= width && coord.y <=
+        height);
   }
 
 
