@@ -106,9 +106,9 @@ class Snake {
 
   bool running = true;
 
-  Snake(int w, int h) {
+  Snake(Coord grid) {
 
-    snakepen = new Coord(w, h);
+    snakepen = grid;
 
     coords.add(newRandomCoord());
     assert(coords.length == 1);
@@ -291,10 +291,11 @@ class SnakeState extends GameLoopHtmlState {
     int cowidth = (cwidth / gridBlockSizeInPixels.getX()).round();
     int coheight = (cheight / gridBlockSizeInPixels.getY()).round();
 
+    Coord grid = new Coord(cowidth, coheight);
     renderer = new GridRenderer2D(canvas);
 
     // XXX Much better to use Coord here.
-    this.snake = new Snake(cowidth, coheight);
+    this.snake = new Snake(grid);
 
 
     this.gold = new Gold(this.snake);
