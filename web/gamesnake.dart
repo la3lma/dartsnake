@@ -367,13 +367,7 @@ class SnakeState extends GameLoopHtmlState {
     renderer.clearCanvas();
 
     renderer.fillCanvas("rgb(255,165,0)");
-
-    canvas.font = "italic bold 24px sans-serif";
-    canvas.strokeText("Inside snake pen", 0, 100);
-
-    canvas.fillRect(0, 0, 20, 20);
     renderer.renderGridBlock(gold.getLocation(), gold_color);
-
     snake.getCoords().forEach((c) => renderer.renderGridBlock(c, white_color));
     var pts = querySelector("#points");
     pts.text = "Points: ${snake.getPoints()}";
