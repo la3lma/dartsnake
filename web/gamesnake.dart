@@ -221,9 +221,6 @@ class Snake {
 class GridRenderer2D {
   CanvasRenderingContext2D canvas;
 
-  String gold_color =  "#FFD700";
-  String white_color = "#FFFFFF";
-
 
   static Coord snakePenSizeInPixels = new Coord(640, 480);
   static Coord gridBlockSizeInPixels = new Coord(10, 10);
@@ -232,9 +229,6 @@ class GridRenderer2D {
     this.canvas = c;
   }
 
-  void clearCanvas() {
-    fillCanvas(white_color);
-  }
 
   void renderGridBlock(final Coord c, final String color) {
     canvas.fillStyle = color;
@@ -265,6 +259,7 @@ class SnakeState extends GameLoopHtmlState {
 
   String gold_color = "#FFD700";
   String white_color = "#FFFFFF";
+  String background_color = "rgb(255,165,0)";
 
   String name;
   Snake snake;
@@ -302,8 +297,6 @@ class SnakeState extends GameLoopHtmlState {
     // XXX Much better to use Coord here.
     this.snake = new Snake(cowidth, coheight);
 
-    // Clear canvas
-    renderer.clearCanvas();
 
     this.gold = new Gold(this.snake);
     this.speed = 10;
@@ -364,11 +357,12 @@ class SnakeState extends GameLoopHtmlState {
   }
 
   onRender(GameLoopHtml gameLoop) {
-    renderer.clearCanvas();
 
-    renderer.fillCanvas("rgb(255,165,0)");
+    renderer.fillCanvas(background_color);
     renderer.renderGridBlock(gold.getLocation(), gold_color);
     snake.getCoords().forEach((c) => renderer.renderGridBlock(c, white_color));
+
+
     var pts = querySelector("#points");
     pts.text = "Points: ${snake.getPoints()}";
   }
